@@ -16,12 +16,7 @@ export class BookViewer {
         this.initButtons();
         this.updateView();
     }
-    bilatuliburua(isbn){
-        fetch(`https://openlibrary.org/search.json?isbn=${isbn}`).
-        then(resp => resp.json()).
-        then(resp => console.log(resp));
-        return resp;
-    }
+  
     initButtons() {
         // aurrera, atzera eta bilatu botoiak hasieratu
         // bilatu botoia sakatzean, erabiltzaileak sartu duen isbn-a duen liburua lortu
@@ -29,18 +24,21 @@ export class BookViewer {
         let aurrera = document.getElementById('aurrera');
         let atzera = document.getElementById('atzera');
         let bilatu = document.getElementById('bilatu');
-        bilatu.addEventListener('click',this.bilatuliburua(izenburua.value));
-        this.handleSearchData(this.data)
+        let  resp =  bilatu.addEventListener('click',this.bilatuliburua(isbn.value));
+        this.handleSearchData(resp);
     }
 
     extractBookData = (book) => {
         // json objektu egoki bat bueltatu, zure webgunean erabili ahal izateko
-        return null;
-      };
+        fetch(`https://openlibrary.org/search.json?isbn=${book}`).
+        then(resp => resp.json());
+        return resp;
+      }
       
     addBookToData = (book, data) => {
         // data array-ean sartu liburua, eta liburu berriaren posizioa bueltatu
-        return null;
+        data.push(book);
+        return data.length - 1;
     };
 
     handleSearchData = (data) => {

@@ -1,5 +1,6 @@
 .flex-container {
   display: flex;
+  justify-content: center;
 }
 
 .flex {
@@ -10,13 +11,11 @@
 }
 
 .left {
-  flex: 0.25;
-  background-color: lightgreen;
+  width: 250px;
 }
 
 .right {
-  flex: 0.75;
-  background-color: lightblue;
+  width: 700px;
 }
 
 input {

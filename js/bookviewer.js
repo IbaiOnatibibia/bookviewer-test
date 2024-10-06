@@ -24,14 +24,26 @@ export class BookViewer {
         let aurrera = document.getElementById('aurrera');
         let atzera = document.getElementById('atzera');
         let bilatu = document.getElementById('bilatu');
-        let  resp =  bilatu.addEventListener('click',this.bilatuliburua(isbn.value));
-        this.handleSearchData(resp);
+       // aurrera.addEventListener('click', this.nextBook);
+        aurrera.onclick = () => this.nextBook();
+        //atzera.addEventListener('click', this.prevBook);
+        atzera.onclick = () => this.prevBook();
+        bilatu.onclick = () =>{ 
+            fetch(`https://openlibrary.org/search.json?isbn=${this.isbn.value}`).
+            then(resp => resp.json()).
+            then(data => this.handleSearchData(data));
+        }
     }
 
     extractBookData = (book) => {
-        // json objektu egoki bat bueltatu, zure webgunean erabili ahal izateko
-        fetch(`https://openlibrary.org/search.json?isbn=${book}`).
-        then(resp => resp.json());
+         // json objektu egoki bat bueltatu, zure webgunean erabili ahal izateko
+         let resp = {
+            isbn: book.docs[0].isbn[0],
+            egilea: book.docs[0].author_name[0],
+            data: book.docs[0].publish_date[0],
+            izenburua: book.docs[0].title,
+            filename: book.filename
+        };
         return resp;
       }
       
@@ -42,23 +54,41 @@ export class BookViewer {
     };
 
     handleSearchData = (data) => {
-        // lortu liburua data objektutik
+         // lortu liburua data objektutik
         // extractBookData eta addBookToData funtzioak erabili, indizea berria lortuz
         // updateView funtzioa erabili, liburu berria bistaratzeko
+        let book = this.extractBookData(data);
+        this.index = this.addBookToData(book, this.data);
+        this.updateView();
     };
 
     updateView() {
-        // liburuaren datu guztiak bistaratu
+         // liburuaren datu guztiak bistaratu
         // liburu kopurua bistaratu
+        let liburua = this.data[this.index];
+        this.izenburua.value  = liburua.izenburua;
+        this.egilea.value = liburua.egilea;
+        this.isbn.value = liburua.isbn;
+        this.dataElem.value = liburua.data;
+        this.irudia.style.backgroundImage = `url(https://covers.openlibrary.org/b/id/${this.data[this.index].filename})`;
+        this.liburuKopuru.value = this.data.length;
     }
 
     nextBook() {
         // Hurrengo indizea lortu eta updateView funtzioa erabili bistaratzeko
         // ez ezazu liburu kopurua gainditu
+        if(this.index + 1 < this.data.length){
+            this.index ++;
+            this.updateView();
+     }
     }
 
     prevBook() {
-        // Aurreko indizea lortu eta updateView funtzioa erabili bistaratzeko
+       // Aurreko indizea lortu eta updateView funtzioa erabili bistaratzeko
         // ez ezazu 0 indizea gainditu
+        if(this.index> 0){
+            this.index --;
+            this.updateView();
+    }
     }
 }

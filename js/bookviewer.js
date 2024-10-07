@@ -38,9 +38,9 @@ export class BookViewer {
     extractBookData = (book) => {
          // json objektu egoki bat bueltatu, zure webgunean erabili ahal izateko
          let resp = {
-            isbn: book.docs[0].isbn[0],
+            isbn: book.docs[0].isbn,
             egilea: book.docs[0].author_name[0],
-            data: book.docs[0].publish_date[0],
+            data: book.docs[0].publish_date,
             izenburua: book.docs[0].title,
             filename: book.filename
         };
@@ -70,7 +70,7 @@ export class BookViewer {
         this.egilea.value = liburua.egilea;
         this.isbn.value = liburua.isbn;
         this.dataElem.value = liburua.data;
-        this.irudia.style.backgroundImage = `url(https://covers.openlibrary.org/b/id/${this.data[this.index].filename})`;
+        this.irudia.src = 'https://covers.openlibrary.org/b/id/' +this.data[this.index].filename;
         this.liburuKopuru.value = this.data.length;
     }
 
